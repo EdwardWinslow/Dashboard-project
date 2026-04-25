@@ -310,7 +310,11 @@
                 const val = line.substring(idx + 1).trim();
                 if (key === 'SUMMARY') current.summary = val;
                 if (key === 'DESCRIPTION') current.description = val.replace(/\\n/g, '\n').replace(/\\,/g, ',').replace(/\\/g, '');
-                if (key === 'DTSTART') { current.dtstart = parseICalDate(line.substring(idx+1).trim()); current.allDay = !line.includes('T'); }
+                if (key === 'DTSTART') { 
+    const rawVal = line.substring(idx+1).trim();
+    current.dtstart = parseICalDate(rawVal); 
+    current.allDay = rawVal.length === 8 || (!rawVal.includes('T') && !rawVal.includes(':'));
+}
                 if (key === 'DTEND') current.dtend = parseICalDate(line.substring(idx+1).trim());
                 if (key === 'LOCATION') current.location = val;
             }
