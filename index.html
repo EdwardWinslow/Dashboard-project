@@ -275,13 +275,19 @@
     }
 
     function parseICalDate(str) {
-        if (!str) return null;
-        str = str.trim();
-        const y = str.substr(0,4), mo = str.substr(4,2), d = str.substr(6,2);
-        if (str.length === 8) return new Date(+y, +mo-1, +d);
-        const h = str.substr(9,2)||'00', mi = str.substr(11,2)||'00', s = str.substr(13,2)||'00';
-        if (str.endsWith('Z')) return new Date(Date.UTC(+y,+mo-1,+d,+h,+mi,+s));
-        return new Date(+y, +mo-1, +d, +h, +mi, +s);
+    if (!str) return null;
+    str = str.trim();
+    const y = str.substr(0,4), mo = str.substr(4,2), d = str.substr(6,2);
+    if (str.length === 8) return new Date(+y, +mo-1, +d);
+    const h = str.substr(9,2)||'00', mi = str.substr(11,2)||'00', s = str.substr(13,2)||'00';
+    if (str.endsWith('Z')) {
+        // Convert UTC to EST (UTC-5) or EDT (UTC-4)
+        const utc = new Date(Date.UTC(+y,+mo-1,+d,+h,+mi,+s));
+        const est = new Date(utc.toLocaleString('en-US', { timeZone: 'America/Toronto' }));
+        return est;
+    }
+    return new Date(+y, +mo-1, +d, +h, +mi, +s);
+}
     }
 
     function formatTime(date) {
