@@ -363,7 +363,6 @@
             if (!res.ok) throw new Error('Fetch failed');
             const text = await res.text();
             allEvents = parseICS(text);
-            console.log(allEvents.slice(0,5));
             renderDay();
         } catch (err) {
             document.getElementById('cal-body').innerHTML =
